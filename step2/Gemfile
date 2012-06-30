@@ -1,0 +1,6 @@
+source "https://rubygems.org"
+
+gem "rdiscount"
+gem "dropbox-sdk"
+
+gem "mocha", group: :test, require: false
