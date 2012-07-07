@@ -1,0 +1,15 @@
+source "https://rubygems.org"
+
+gem "rdiscount"
+gem "dropbox-sdk"
+gem "cuba"
+gem "rack_csrf"
+gem "rack-protection"
+gem "rack-flash3"
+gem "tilt"
+
+group :test do
+  gem "mocha", require: false
+  gem "capybara"
+  # gem "capybara-webkit"
+end

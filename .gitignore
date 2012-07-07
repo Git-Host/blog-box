@@ -1,2 +1,4 @@
 .rvmrc
 blog-box.komodoproject
+step3/posts/*.md
+step3/public/*.html

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <%= Rack::Csrf.metatag(env) %>
+    <title>blog-box, by @cristianrasch</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="blog-box: Markdown and Dropbox powered blogging software">
+    <meta name="author" content="Cristian Rasch">
+
+    <!-- Le styles -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+      <link href="/css/application.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <!--link rel="shortcut icon" href="../assets/ico/favicon.ico"-->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">blog-box</a>
+          <% if logged_in? %>
+            <div class="btn-group pull-right">
+              <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-user"></i> Admin
+                <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <!--li><a href="#">Profile</a></li>
+                <li class="divider"></li-->
+                <li>
+                  <form method="post" action="/protected/sign_out" id="logout-form" class="hidden">
+                    <%= Rack::Csrf.tag(env) %>
+                    <input type="submit" value="Sign out" class="hidden"/>
+                  </form>
+                  <a href="#" id="logout-link">Sign out</a>
+                </li>
+              </ul>
+            </div>
+          <% end %>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <% if logged_in? %>
+                <li>
+                  <form method="post" action="/protected/publish" id="publish-form" class="hidden">
+                    <%= Rack::Csrf.tag(env) %>
+                    <input type="submit" value="Publish" class="hidden"/>
+                  </form>
+                  <a href="#" class="publish-link">Publish</a>
+                </li>
+              <% else %>
+                <li><a href="/protected/sign_in">Sign in</a></li>
+              <% end %>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              <li class="nav-header">Recent posts</li>
+              <% if posts.empty? %>
+                <li class="active"><a href="#">There are no posts published yet :(</a></li>
+              <% end %>
+              <% posts.each_with_index do |post, i| %>
+                <li class="<%= "active" if active_post?(post, i) %>"><a href="/posts/<%= post.filename %>"><%= post.title %></a></li>
+              <% end %>
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          <% if flash[:notice] || flash[:error] %>
+            <div class="alert alert-<%= flash[:notice] ? "success" : "error" %>">
+              <a class="close" data-dismiss="alert" href="#">×</a>
+              <%= flash[:notice] || flash[:error] %>
+            </div>
+          <% end %>
+          <div class="hero-unit">
+            <%= body %>
+          </div>
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>&copy; Cristian Rasch <%= Date.today.year %></p>
+      </footer>
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/application.js"></script>
+  </body>
+</html>

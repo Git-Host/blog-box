@@ -1,0 +1,61 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.2.8)
+    capybara (1.1.2)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      selenium-webdriver (~> 2.0)
+      xpath (~> 0.1.4)
+    childprocess (0.3.3)
+      ffi (~> 1.0.6)
+    cuba (3.0.0)
+      rack
+    dropbox-sdk (1.3)
+      json
+    ffi (1.0.11)
+    json (1.7.3)
+    libwebsocket (0.1.3)
+      addressable
+    metaclass (0.0.1)
+    mime-types (1.19)
+    mocha (0.11.4)
+      metaclass (~> 0.0.1)
+    multi_json (1.3.6)
+    nokogiri (1.5.5)
+    rack (1.4.1)
+    rack-flash3 (1.0.1)
+      rack
+      rack
+    rack-protection (1.2.0)
+      rack
+    rack-test (0.6.1)
+      rack (>= 1.0)
+    rack_csrf (2.4.0)
+      rack (>= 0.9)
+    rdiscount (1.6.8)
+    rubyzip (0.9.9)
+    selenium-webdriver (2.24.0)
+      childprocess (>= 0.2.5)
+      libwebsocket (~> 0.1.3)
+      multi_json (~> 1.0)
+      rubyzip
+    tilt (1.3.3)
+    xpath (0.1.4)
+      nokogiri (~> 1.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  capybara
+  cuba
+  dropbox-sdk
+  mocha
+  rack-flash3
+  rack-protection
+  rack_csrf
+  rdiscount
+  tilt

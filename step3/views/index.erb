@@ -1,0 +1,14 @@
+<% if posts.empty? %>
+  <h1>Oh oh..</h1>
+  <p>You don't seem to have any blog posts published yet S)</p>
+  <p>Go ahead and..</p>
+  <p>
+    <% if logged_in? %>
+      <a class="btn btn-primary btn-large publish-link" href="#">Publish one &raquo;</a>
+    <% else %>
+      <a class="btn btn-primary btn-large" href="/protected/login">Login &raquo;</a>
+    <% end %>
+  </p>
+<% else %>
+  <%= render_post(posts.first) %>
+<% end %>
