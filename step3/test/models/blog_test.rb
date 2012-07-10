@@ -37,8 +37,10 @@ class BlogTest < MiniTest::Unit::TestCase
   end
   
   def test_renders_a_post
-    FileUtils.touch File.join(@blog.public_directory, "post.html")
-    assert_empty @blog.render_post("post.html")
+    post = File.join(@blog.public_directory, "post.html")
+    File.open(post, "w") { |f| f << "a <strong>stupid</strong> blog post" }
+    
+    assert_equal "a <strong>stupid</strong> blog post", @blog.render_post("post.html")
   end
   
   def test_finds_a_post_by_filename
