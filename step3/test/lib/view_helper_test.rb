@@ -20,6 +20,7 @@ class ViewHelperTest < MiniTest::Unit::TestCase
   def test_user_is_logged_in
     @obj.expects(:_session).with(:dropbox_session).returns(false)
     refute @obj.logged_in?
+    
     @obj.expects(:_session).with(:dropbox_session).returns(true)
     assert @obj.logged_in?
   end

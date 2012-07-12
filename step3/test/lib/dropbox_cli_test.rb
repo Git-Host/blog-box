@@ -12,20 +12,27 @@ class DropboxCLITest < MiniTest::Unit::TestCase
   end
   
   def test_fetchs_posts
+    dropbox_client, posts_dir = mock_dropbox_client, "zzz"
+    Dir.expects(:exists?).with(posts_dir).returns(true)
+    
+    posts_fetched = dropbox_client.fetch_posts(posts_dir)
+    assert_equal 3, posts_fetched
+  end
+  
+private
+
+  def mock_dropbox_client
     client = Object.new
     contents = (1..3).map { |i| {"path" => "file#{i}.md"} }
     client.expects(:metadata).with("/").returns({"contents" => contents})
-    dest = "zzz"
     (1..3).each do |i|
       post = "file#{i}.md"
       client.expects(:get_file_and_metadata).with(post).returns([nil, i])
-      File.expects(:open).with(File.join(dest, post), "w")
+      File.expects(:open).with(File.join("zzz", post), "w")
     end
     
     dropbox_client = DropboxCLI.new("blah")
     dropbox_client.stubs(:client).returns(client)
-    Dir.expects(:exists?).with(dest).returns(true)
-    posts_fetched = dropbox_client.fetch_posts(dest)
-    assert_equal 3, posts_fetched
+    dropbox_client
   end
 end

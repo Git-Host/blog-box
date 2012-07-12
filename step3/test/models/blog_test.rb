@@ -18,6 +18,7 @@ class BlogTest < MiniTest::Unit::TestCase
 
   def test_lists_all_available_posts
     posts = @blog.find_all_posts
+    
     assert_equal 2, posts.length
     refute_nil posts.find { |post| post.filename == "my-first-blog-post.html" }
     refute_nil posts.find { |post| post.filename == "my-second-blog-post.html" }

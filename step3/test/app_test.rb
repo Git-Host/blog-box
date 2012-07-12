@@ -13,10 +13,7 @@ class AppTest < CapybaraTestCase
   end
   
   def test_a_particular_post
-    post = Post.new(File.expand_path("first-test-post.md", "test/posts"))
-    Blog.any_instance.expects(:find_post_by_filename).with("my-first-blog-post.html").returns(post)
-    Blog.any_instance.expects(:render_post).with("my-first-blog-post.html").returns(post.to_html)
-    
+    mock_blog_instance_methods
     visit "/posts/my-first-blog-post.html"
     
     assert_equal "/posts/my-first-blog-post.html", current_path
@@ -29,5 +26,13 @@ class AppTest < CapybaraTestCase
     
     assert_equal "/", current_path
     page.has_css?("div.alert-error", text: "Post not found.", visible: true)
+  end
+  
+private
+
+  def mock_blog_instance_methods
+    post = Post.new(File.expand_path("first-test-post.md", "test/posts"))
+    Blog.any_instance.expects(:find_post_by_filename).with("my-first-blog-post.html").returns(post)
+    Blog.any_instance.expects(:render_post).with("my-first-blog-post.html").returns(post.to_html)
   end
 end
