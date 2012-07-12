@@ -26,6 +26,8 @@ class AppTest < CapybaraTestCase
   
   def test_a_nonexistent_post
     visit "/posts/fake-post.html"
+    
     assert_equal "/", current_path
+    page.has_css?("div.alert-error", text: "Post not found.", visible: true)
   end
 end

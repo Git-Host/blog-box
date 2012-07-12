@@ -24,9 +24,10 @@ class ProtectedAppTest < CapybaraTestCase
   
   def test_signing_in_with_an_authorized_dropbox_session
     DropboxSession.any_instance.expects(:authorized?).returns(true)
-    
     visit "/protected/sign_in"
+    
     assert_equal "/", current_path
+    page.has_css?("div.alert-success", text: "Successfully signed in", visible: true)
   end
   
   def test_authorize
@@ -46,9 +47,11 @@ class ProtectedAppTest < CapybaraTestCase
     Cuba.any_instance.expects(:logged_in?).at_least(2).returns(true)
     
     visit "/posts/my-first-blog-post.html"
+    
     Blog.any_instance.expects(:render_post).returns("")
     click_button "Sign out"
     assert_equal "/", current_path
+    page.has_css?("div.alert-success", text: "Successfully signed out", visible: true)
   end
   
   def test_publish
@@ -62,6 +65,7 @@ class ProtectedAppTest < CapybaraTestCase
     Blog.any_instance.expects(:publish_all_posts).returns(3)
     click_button "Publish"
     assert_equal "/", current_path
+    page.has_css?("div.alert-success", text: "3 posts have been published.", visible: true)
   end
   
   def test_publishing_without_being_authorized

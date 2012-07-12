@@ -27,6 +27,7 @@ Cuba.define do
       if post
         _render "posts/show", post: post
       else
+        flash[:error] = "Post not found."
         res.redirect "/"
       end
     end
