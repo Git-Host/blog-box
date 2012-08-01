@@ -12,7 +12,7 @@ class ViewHelperTest < MiniTest::Unit::TestCase
   def test_renders_a_partial
     @obj.expects(:render).with("views/index.erb", {posts: "blah"}).returns("index")
     @obj.expects(:render).with("views/layouts/application.erb", {posts: "blah", body: "index"}).returns("html")
-    @obj.expects(:write).with("html")
+    @obj.stubs(write: "html")
     
     @obj._render("index", posts: "blah")
   end
@@ -26,13 +26,15 @@ class ViewHelperTest < MiniTest::Unit::TestCase
   end
   
   def test_renders_a_post
-    Blog.any_instance.expects(:render_post).with("post.md").returns("my post")
-    @obj.render_post(stub(filename: "post.md"))
+    post, html = "post.md", "<h1>Blog post</h1>"
+    Blog.any_instance.expects(:render_post).with(post).returns(html)
+    assert_equal html, @obj.render_post(stub(filename: post))
   end
   
   def test_identifies_an_active_post
-    @obj.stubs(request_path: "/")
     post = stub(filename: "post.md")
+    
+    @obj.stubs(request_path: "/")
     assert @obj.active_post?(post, 0)
     refute @obj.active_post?(post, 1)
     

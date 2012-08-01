@@ -14,6 +14,7 @@ class BlogTest < MiniTest::Unit::TestCase
 
   def test_lists_all_available_posts
     posts = @blog.find_all_posts
+    
     assert_equal 2, posts.length
     refute_nil posts.find { |post| post =~ /first-test-post/ }
     refute_nil posts.find { |post| post =~ /second-test-post/ }
@@ -26,12 +27,22 @@ class BlogTest < MiniTest::Unit::TestCase
   def test_turns_md_posts_into_html_articles
     md_posts = @blog.find_all_posts
     @blog.publish_all_posts
-    md_posts.each do |post|
+    
+    to_html(md_posts) do |html_articles|
+      assert html_articles.all? { |html_article| File.exists?(html_article) }
+    end
+    FileUtils.rm_rf @blog.public_directory
+  end
+  
+private
+
+  def to_html(md_posts)
+    html_posts = md_posts.inject([]) do |posts, post|
       extname = File.extname(post)
       basename = File.basename(post, extname)
       html_article = File.join(@blog.public_directory, "#{basename}.html")
-      assert File.exists?(html_article)
+      posts << html_article
     end
-    FileUtils.rm_rf @blog.public_directory
+    yield html_posts
   end
 end

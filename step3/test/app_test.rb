@@ -13,7 +13,7 @@ class AppTest < CapybaraTestCase
   end
   
   def test_a_particular_post
-    mock_blog_instance_methods
+    stub_existing_blog_post
     visit "/posts/my-first-blog-post.html"
     
     assert_equal "/posts/my-first-blog-post.html", current_path
@@ -21,7 +21,7 @@ class AppTest < CapybaraTestCase
     assert page.has_content?("1st test post")
   end
   
-  def test_a_nonexistent_post
+  def test_visits_a_nonexistent_post
     visit "/posts/fake-post.html"
     
     assert_equal "/", current_path
@@ -30,9 +30,9 @@ class AppTest < CapybaraTestCase
   
 private
 
-  def mock_blog_instance_methods
+  def stub_existing_blog_post
     post = Post.new(File.expand_path("first-test-post.md", "test/posts"))
-    Blog.any_instance.expects(:find_post_by_filename).with("my-first-blog-post.html").returns(post)
-    Blog.any_instance.expects(:render_post).with("my-first-blog-post.html").returns(post.to_html)
+    Blog.any_instance.stubs(find_post_by_filename: post)
+    Blog.any_instance.stubs(render_post: post.to_html)
   end
 end

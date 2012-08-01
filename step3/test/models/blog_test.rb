@@ -38,10 +38,10 @@ class BlogTest < MiniTest::Unit::TestCase
   end
   
   def test_renders_a_post
-    post = File.join(@blog.public_directory, "post.html")
-    File.open(post, "w") { |f| f << "a <strong>stupid</strong> blog post" }
+    post_file, blog_post = "post.html", "a <strong>dummy</strong> blog post"
+    File.open(File.join(@blog.public_directory, post_file), "w") { |f| f << blog_post }
     
-    assert_equal "a <strong>stupid</strong> blog post", @blog.render_post("post.html")
+    assert_equal blog_post, @blog.render_post(post_file)
   end
   
   def test_finds_a_post_by_filename

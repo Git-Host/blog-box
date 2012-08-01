@@ -9,7 +9,7 @@ require File.expand_path("view_helper", "lib")
 class ProtectedAppTest < CapybaraTestCase
   def setup
     super
-    # rack-test hack!
+    # basic-autheticate user
     page.driver.browser.authorize "admin", "admin"
   end
   
@@ -36,11 +36,9 @@ class ProtectedAppTest < CapybaraTestCase
   end
   
   def test_sign_out
-    mock_post_page
+    stub_post_page
     visit "/posts/my-first-blog-post.html"
     
-    # this one is called once we are redirected back to /
-    Blog.any_instance.stubs(render_post: "")
     click_button "Sign out"
     assert_equal "/", current_path
     page.has_css?("div.alert-success", text: "Successfully signed out", visible: true)
@@ -82,20 +80,13 @@ private
     DropboxSession.any_instance.stubs(serialize: nil)
   end
   
-  def mock_post_page
-    post = Post.new(File.expand_path("first-test-post.md", "test/posts"))
-    Blog.any_instance.expects(:find_post_by_filename).with("my-first-blog-post.html").returns(post)
-    Blog.any_instance.expects(:render_post).with("my-first-blog-post.html").returns(post.to_html)
-    Cuba.any_instance.expects(:logged_in?).at_least(2).returns(true)
-  end
-  
   def stub_post_page
     Blog.any_instance.stubs(render_post: "")
     Cuba.any_instance.stubs(logged_in?: true)
   end
   
   def mock_publishing_posts
-    DropboxSession.any_instance.expects(:authorized?).returns(true)
+    DropboxSession.any_instance.stubs(authorized?: true)
     DropboxCLI.any_instance.stubs(fetch_posts: nil)
     Blog.any_instance.expects(:publish_all_posts).returns(3)
   end
